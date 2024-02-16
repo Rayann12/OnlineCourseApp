@@ -1,0 +1,27 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+body {
+
+    background-image: url('https://img.freepik.com/free-vector/geometric-science-education-background-vector-gradient-blue-digital-remix_53876-125993.jpg');
+    height: 100%;
+    width: 100%;
+    opacity: 1;
+    background-size: cover;
+}
+.shadow {
+    height: 72vh; 
+    width: 50%; 
+    margin-left: 25%; 
+    margin-top: 5%; 
+    color: white;
+    border-radius: 5%;
+}
+.ref {
+    width: 40%; 
+    margin-left: 30%; 
+    margin-top: 10%;
+}

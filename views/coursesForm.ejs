@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Add a Course</title>
+    <style>
+        /* Ensure that main content starts below the navbar */
+        .w3-main {
+            margin-top: 50px;
+            /* Adjust this value based on the height of your navbar */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="w3-top">
+        <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+            <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1"
+                href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+            <a href="/index" class="w3-bar-item w3-button w3-theme-l1">Home</a>
+            <a href="/courses" class="w3-bar-item w3-button w3-black">All Courses</a>
+            <a href="/enrolled" class="w3-bar-item w3-button w3-black">Currently Enrolled</a>
+            <a href="/completed" class="w3-bar-item w3-button w3-black">Completed</a>
+            <% if (isInstructor) { %>
+                <% if(course) { %>
+                    <a href="/coursesForm" class="w3-bar-item w3-button w3-black">Add a Course</a>
+                    <a href="/myCourses" class="w3-bar-item w3-button w3-hover-black">Edit a Course</a>
+                    <% } else { %>
+                        <a href="/coursesForm" class="w3-bar-item w3-button w3-hover-black">Add a Course</a>
+                        <a href="/myCourses" class="w3-bar-item w3-button w3-black">Edit a Course</a>
+                        <% } %>
+                        <% } %>
+                            <a href="/logout" class="w3-bar-item w3-button w3-black">Logout</a>
+                            <a href="javascript:void(0)" onclick="w3_open()"
+                                class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1"
+                                title="Open Menu"><i class="fa fa-bars"></i></a>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <nav style="width:16.9%; top:0; margin-top: 43px;"
+        class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+        <a href="javascript:void(0)" onclick="w3_close()"
+            class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+            <i class="fa fa-remove"></i>
+        </a>
+        <a href="/index" style="text-decoration: none;"><h4 class="w3-bar-item"><b>Menu</b></h4></a>
+        <a class="w3-bar-item w3-button w3-hover-black" href="/courses">All Courses</a>
+        <a class="w3-bar-item w3-button w3-hover-black" href="/enrolled">Currently Enrolled</a>
+        <a class="w3-bar-item w3-button w3-hover-black" href="/completed">Completed</a>
+        <% if (isInstructor) { %>
+            <% if (course) { %>
+                <a class="w3-bar-item w3-button w3-hover-black" href="/coursesForm">Add a Course</a>
+                <a class="w3-bar-item w3-button w3-black" href="/myCourses">Edit a Course</a>
+                <% } else { %>
+                    <a class="w3-bar-item w3-button w3-black" href="/coursesForm">Add a Course</a>
+                    <a class="w3-bar-item w3-button w3-hover-black" href="/myCourses">Edit a Course</a>
+                    <% } %>
+                        <% } %>
+                            <a class="w3-bar-item w3-button w3-hover-black" href="/logout">Logout</a>
+    </nav>
+
+    <!-- Overlay effect when opening sidebar on small screens -->
+    <div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu"
+        id="myOverlay"></div>
+    <div class="w3-main" style="margin-left:250px;">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- First column for the form -->
+                <div class="col-md-6">
+                    <div class="container mt-5">
+                        <h2>Add a Course</h2>
+                        <form>
+                            <div class="form-group">
+                                <label for="title">Title:</label>
+                                <input type="text" class="form-control" id="formTitle" name="title" required
+                                    style="width: 95%;">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description:</label>
+                                <textarea class="form-control" rows="5" id="formDescription" name="formDescription"
+                                    required style="width: 95%;"></textarea>
+                            </div>
+                            <div class="mt-3">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#addSectionModal">
+                                    Add Text Section
+                                </button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#addVideoSectionModal">
+                                    Add Video Section
+                                </button>
+                                <button onclick="submitForm()" class="btn btn-primary bg-green"
+                                    id="submitFinal">Submit</button>
+                            </div>
+                        </form>
+
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="addSectionModal" tabindex="-1" role="dialog"
+                        aria-labelledby="addSectionModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addSectionModalLabel">Add Section</h5>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Modal body content goes here -->
+                                    <!-- Example: form fields to add a new section -->
+                                    <form id="addSectionForm">
+                                        <div class="form-group">
+                                            <label for="sectionTitle">Title</label>
+                                            <input type="text" class="form-control" id="sectionTitle"
+                                                placeholder="Enter section title">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="sectionContent">Content</label>
+                                            <textarea class="form-control" id="sectionContent" rows="3"
+                                                placeholder="Enter section content"></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary" id="saveChangesButton">Save
+                                        Section</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="addVideoSectionModal" tabindex="-1" role="dialog"
+                        aria-labelledby="addVideoSectionModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addVideoSectionModalLabel">Add Video Section</h5>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="addVideoSectionForm">
+                                        <div class="form-group">
+                                            <label for="videoSectionTitle">Title</label>
+                                            <input type="text" class="form-control" id="videoSectionTitle"
+                                                placeholder="Enter section title">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="videoLink">Embed the video here </label>
+                                            <input type="text" class="form-control" id="videoLink"
+                                                placeholder="Enter video link">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary" id="saveVideoSectionButton">Save
+                                        Section</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion mt-3" id="sectionAccordion">
+                        <!-- Sections will be added here -->
+                    </div>
+                </div>
+                <!-- Second column for the image -->
+                <div class="col-md-6 mt-4">
+                    <div style="margin: 2px;border: 5px solid black;border-radius: 20px;">
+                        <img src="https://myownbucketfortest1234.s3.ap-south-1.amazonaws.com/scienceGuy2.jpg"
+                            alt="Image" class="img-fluid m-2" style="width: 98%; height:auto;">
+                    </div>
+                </div>
+                <!-- Edit Section Modal -->
+                <div class="modal fade" id="editSectionModal" tabindex="-1" role="dialog"
+                    aria-labelledby="editSectionModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editSectionModalLabel">Edit Section</h5>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="editSectionForm">
+                                    <div class="form-group">
+                                        <label for="editSectionTitle">Title</label>
+                                        <input type="text" class="form-control" id="editSectionTitle"
+                                            placeholder="Enter section title">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="editSectionContent">Content</label>
+                                        <textarea class="form-control" id="editSectionContent" rows="3"
+                                            placeholder="Enter section content"></textarea>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="saveEditChangesButton">Save
+                                    Changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var course = <%- JSON.stringify(course) %>;
+        var i = 0;
+        $(document).ready(function () {
+            if (course) {
+                $('#formTitle').val(course.title || '');
+                $('#formDescription').val(course.description || '');
+
+                if (course.sections) {
+                    course.sections.forEach(function (section, index) {
+                        addSectionToDisplay(section.title, section.content, index);
+                    });
+                }
+            }
+
+            $('#saveChangesButton').on('click', function () {
+                var sectionTitle = $('#sectionTitle').val();
+                var sectionContent = $('#sectionContent').val();
+
+                addSectionToDisplay(sectionTitle, sectionContent, i);
+
+                $('#sectionTitle').val('');
+                $('#sectionContent').val('');
+                $('#addSectionModal').modal('hide');
+
+                i += 1;
+            });
+
+            function addSectionToDisplay(title, content, index) {
+                // Create accordion item
+                var accordionItem = $('<div class="accordion-item">');
+
+                // Create accordion button with embedded buttons
+                var accordionButton = $('<button class="accordion-button" style="display: flex;" type="button" data-bs-toggle="collapse" data-bs-target="#collapse' + index + '" aria-expanded="true" aria-controls="collapse' + index + '">');
+
+                // Create a div for the title and buttons with flex and justify-content-between
+                var titleButtonsDiv = $('<div style="display: flex; justify-content: space-between; width: 100%;">');
+
+                // Create div for title
+                var titleDiv = $('<div class="mr-auto">').text(title);
+
+                // Create div for edit and delete buttons
+                var buttonsDiv = $('<div>');
+
+                var editButton = $('<button class="btn btn-primary edit-section me-2" id="edit' + index + '" data-index="' + index + '">Edit</button>');
+                var deleteButton = $('<button class="btn btn-danger delete-section me-2" id="delete' + index + '" data-index="' + index + '">Delete</button>');
+
+                // Append title and buttons to titleButtonsDiv
+                titleButtonsDiv.append(titleDiv, buttonsDiv.append(editButton, deleteButton));
+
+                // Append titleButtonsDiv to accordion button
+                accordionButton.append(titleButtonsDiv);
+
+                // Create accordion collapse
+                var accordionCollapse = $('<div id="collapse' + index + '" class="accordion-collapse collapse show" aria-labelledby="heading' + index + '" data-bs-parent="#sectionAccordion">')
+                    .html('<div class="accordion-body">' + content + '</div>');
+
+                // Add button and collapse to accordion item
+                accordionItem.append(accordionButton, accordionCollapse);
+
+                // Append accordion item to accordion container
+                $('#sectionAccordion').append(accordionItem);
+            }
+
+
+
+            // Edit button click event listener
+            $(document).on('click', '.edit-section', function () {
+                var index = $(this).data('index');
+                var sectionTitle = course && course.sections[index] ? course.sections[index].title : '';
+                var sectionContent = course && course.sections[index] ? course.sections[index].content : '';
+
+                // Populate the edit section modal with current section details
+                $('#editSectionTitle').val(sectionTitle);
+                $('#editSectionContent').val(sectionContent);
+                $('#editSectionModal').modal('show');
+
+                // Save the index of the section being edited
+                $('#editSectionModal').data('index', index);
+            });
+
+            // Save changes in edit section modal
+            $('#saveEditChangesButton').on('click', function () {
+                var index = $('#editSectionModal').data('index');
+                var newTitle = $('#editSectionTitle').val();
+                var newContent = $('#editSectionContent').val();
+
+                // Update the section in the course object
+                if (course && course.sections[index]) {
+                    course.sections[index].title = newTitle;
+                    course.sections[index].content = newContent;
+                }
+
+                // Update the corresponding section div directly
+                var sectionDiv = $('#sectionAccordion').find('.accordion-item').eq(index);
+                sectionDiv.find('.accordion-button .mr-auto').text(newTitle);
+
+
+
+                // Update the accordion body content
+                sectionDiv.find('.accordion-body').html(newContent);
+
+                // Hide the edit section modal
+                $('#editSectionModal').modal('hide');
+            });
+
+            // Delete button click event listener
+            $(document).on('click', '.delete-section', function () {
+                var index = $(this).data('index');
+
+                // Remove the section from the course object
+                if (course && course.sections[index]) {
+                    course.sections.splice(index, 1);
+                }
+
+                // Remove the corresponding accordion item
+                $('#sectionAccordion').find('.accordion-item').eq(index).remove();
+            });
+        });
+
+        // Save Video Section Button click event listener
+        $('#saveVideoSectionButton').on('click', function () {
+            var sectionTitle = $('#videoSectionTitle').val();
+            var videoLink = $('#videoLink').val();
+            console.log("Hello")
+            // Add Video Section to display
+            addVideoSectionToDisplay(sectionTitle, videoLink, i);
+
+            $('#videoSectionTitle').val('');
+            $('#videoLink').val('');
+            $('#addVideoSectionModal').modal('hide');
+
+            i += 1;
+        });
+
+        function addVideoSectionToDisplay(title, videoLink, index) {
+            // Create accordion item
+            var accordionItem = $('<div class="accordion-item">');
+
+            // Create accordion button with embedded buttons
+            var accordionButton = $('<button class="accordion-button" style="display: flex;" type="button" data-bs-toggle="collapse" data-bs-target="#collapse' + index + '" aria-expanded="true" aria-controls="collapse' + index + '">');
+
+            // Create a div for the title and buttons with flex and justify-content-between
+            var titleButtonsDiv = $('<div style="display: flex; justify-content: space-between; width: 100%;">');
+
+            // Create div for title
+            var titleDiv = $('<div class="mr-auto">').text(title);
+
+            // Create div for edit and delete buttons
+            var buttonsDiv = $('<div>');
+
+            var editButton = $('<button class="btn btn-primary edit-section me-2" id="edit' + index + '" data-index="' + index + '">Edit</button>');
+            var deleteButton = $('<button class="btn btn-danger delete-section me-2" id="delete' + index + '" data-index="' + index + '">Delete</button>');
+
+            // Append title and buttons to titleButtonsDiv
+            titleButtonsDiv.append(titleDiv, buttonsDiv.append(editButton, deleteButton));
+
+            // Append titleButtonsDiv to accordion button
+            accordionButton.append(titleButtonsDiv);
+
+            // Create accordion collapse
+            var accordionCollapse = $('<div id="collapse' + index + '" class="accordion-collapse collapse show" aria-labelledby="heading' + index + '" data-bs-parent="#sectionAccordion">')
+                .html('<div class="accordion-body">' + videoLink + '</div>');
+
+            // Add button and collapse to accordion item
+            accordionItem.append(accordionButton, accordionCollapse);
+
+            // Append accordion item to accordion container
+            $('#sectionAccordion').append(accordionItem);
+        }
+
+        async function submitForm() {
+            // Get the course ID
+            event.preventDefault()
+            console.log("HelloSASAS ", course)
+            if (course) {
+                console.log("OIJsladlalsdlksadsakdknskdsakjksadkjskjdkjskjskadkjnjdnsaa")
+                var courseId = course._id;
+
+                // Gather the form data
+                var formData = {
+                    title: $('#formTitle').val(),
+                    description: $('#formDescription').val(),
+                    sections: [], // Array to hold the sections
+                    id: courseId
+                };
+
+                // Collect the sections
+                $('#sectionAccordion .accordion-item').each(function () {
+                    var sectionTitle = $(this).find('.accordion-button').text();
+                    var sectionContent = $(this).find('.accordion-body').text();
+                    formData.sections.push({
+                        title: sectionTitle,
+                        content: sectionContent
+                    });
+                });
+                console.log("Form data is, ", formData)
+                // Send a POST request to update the course
+                fetch('/coursesForm', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to update course details');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        window.location.reload();
+                        // Handle success response
+                    })
+                    .catch(error => {
+                        console.error('Error updating course details:', error);
+                        // Handle error
+                    });
+            }
+            else {
+                // Gather the form data
+                var formData = {
+                    title: $('#formTitle').val(),
+                    description: $('#formDescription').val(),
+                    sections: [] // Array to hold the sections
+                };
+
+                // Collect the sections
+                $('#sectionAccordion .accordion-item').each(function () {
+                    var sectionTitle = $(this).find('.accordion-button').text();
+                    var sectionContent = $(this).find('.accordion-body').html();
+                    formData.sections.push({
+                        title: sectionTitle,
+                        content: sectionContent
+                    });
+                });
+
+                // Send a POST request to add the new course
+                console.log("Hello13213213213, ", formData)
+                fetch('/coursesForm', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            console.log(response.ok)
+                            throw new Error('Failed to add new course');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('New course added successfully:', data);
+                        window.location.reload()
+                        // Handle success response
+                    })
+                    .catch(error => {
+                        console.error('Error adding new course:', error);
+                        // Handle error
+                    });
+            }
+        }
+    </script>
+
+</body>
+
+</html>

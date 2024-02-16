@@ -1,0 +1,8 @@
+.env
+node_modules
+controllers
+tests/registerTests.js
+sampleMail.js
+sample.html
+tobedeleted.js
+tobedeletedOne.js
