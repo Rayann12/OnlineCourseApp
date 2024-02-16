@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link rel="stylesheet" href="stylesheets/stylesIndex.css">
@@ -35,7 +35,7 @@
                 <!-- Email input -->
                 <div class="form-outline mb-4 mt-5 pt-1">
                     <input type="email" id="loginName" class="form-control" />
-                    <label class="form-label" for="loginName">Email or username</label>
+                    <label class="form-label" for="loginName">Email</label>
                 </div>
 
                 <!-- Password input -->
@@ -58,7 +58,8 @@
                 <!-- Sign-in buttons -->
                 <div class="flex-row mb-4">
                     <button type="button" class="btn btn-primary btn-block" onclick="onLogin(false)">Sign in</button>
-                    <button type="button" class="btn btn-primary btn-block" onclick="onLogin(true)">Sign in as Instructor</button>
+                    <button type="button" class="btn btn-primary btn-block" onclick="onLogin(true)">Sign in as
+                        Instructor</button>
                 </div>
 
                 <!-- Register buttons -->
@@ -86,7 +87,20 @@
                 remember,
                 asInstructor
             };
+            // Email validation regex pattern
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+            // Basic validation
+            if (!email || !password) {
+                alert("Please enter both email and password.");
+                return;
+            }
+
+            // Email format validation
+            if (!emailPattern.test(email)) {
+                alert("Please enter a valid email address.");
+                return;
+            }
             const loginUrl = '/login'; // Replace with your login endpoint
 
             try {
@@ -98,9 +112,9 @@
                     body: JSON.stringify(loginData),
                 });
 
-            if (response.status == 200) {window.location.href='/index'};
-            if (response.status == 401) {alert("Only instructors can login as instructors.")}
-            if (response.status == 403) {alert("Incorrect Credentials. Please try again.")}
+                if (response.status == 200) { window.location.href = '/index' };
+                if (response.status == 401) { alert("Only instructors can login as instructors.") }
+                if (response.status == 403) { alert("Incorrect Credentials. Please try again.") }
             }
             catch (error) {
                 console.log(error)

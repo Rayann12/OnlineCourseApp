@@ -25,6 +25,7 @@ router.post('/', verifyTokenMiddleware, checkInstructor, async (req, res, next) 
             title: req.body.title,
             description: req.body.description,
             sections: req.body.sections,
+            cost: req.body.cost,
             instructor: instructorOb.name
         };
         if (req.body.id) {

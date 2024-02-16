@@ -133,7 +133,7 @@ const sendMail = async (email, activationToken) => {
         html: `
         <p>Dear user,</p>
         <p>Click the following link to activate your account:</p>
-        <a href="http://localhost:3000/activate/${activationToken}">Activate Account</a>
+        <a href="http://13.201.67.252/activate/${activationToken}">Activate Account</a>
       `
     };
 

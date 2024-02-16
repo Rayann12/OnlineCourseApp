@@ -26,8 +26,7 @@ const courseSchema = new mongoose.Schema({
         }
     }],
     instructor: { type: String, ref: 'User' },
-    cost: {type: Number},
-    certificate: {type: String}
+    cost: {type: Number, required: true}
 });
 
 // Create the Course model
