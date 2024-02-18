@@ -21,6 +21,7 @@ router.post('/', verifyTokenMiddleware, checkInstructor, async (req, res, next) 
         let instructorOb = await User.findOne({ _id: userId })
 
         // Create a new course data object
+        console.log(req.body.sections)
         const courseData = {
             title: req.body.title,
             description: req.body.description,

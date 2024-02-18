@@ -235,6 +235,7 @@
         var i = 0;
         $(document).ready(function () {
             if (course) {
+                i = course.sections.length;
                 $('#formTitle').val(course.title || '');
                 $('#formDescription').val(course.description || '');
 
@@ -269,7 +270,7 @@
                 var titleButtonsDiv = $('<div style="display: flex; justify-content: space-between; width: 100%;">');
 
                 // Create div for title
-                var titleDiv = $('<div class="mr-auto">').text(title);
+                var titleDiv = $('<div class="mr-auto" style="max-width: 100px; text-wrap: wrap">').text(title);
 
                 // Create div for edit and delete buttons
                 var buttonsDiv = $('<div>');
@@ -339,7 +340,7 @@
             // Delete button click event listener
             $(document).on('click', '.delete-section', function () {
                 var index = $(this).data('index');
-
+                console.log(index)
                 // Remove the section from the course object
                 if (course && course.sections[index]) {
                     course.sections.splice(index, 1);
@@ -347,6 +348,11 @@
 
                 // Remove the corresponding accordion item
                 $('#sectionAccordion').find('.accordion-item').eq(index).remove();
+                // Update the indices of the remaining sections
+                $('#sectionAccordion').find('.accordion-item').each(function (i) {
+                    $(this).find('.edit-section').attr('data-index', i);
+                    $(this).find('.delete-section').attr('data-index', i);
+                });
             });
         });
 
@@ -376,7 +382,7 @@
             var titleButtonsDiv = $('<div style="display: flex; justify-content: space-between; width: 100%;">');
 
             // Create div for title
-            var titleDiv = $('<div class="mr-auto">').text(title);
+            var titleDiv = $('<div class="mr-auto" style="max-width: 100px;text-wrap: wrap">').text(title);
 
             // Create div for edit and delete buttons
             var buttonsDiv = $('<div>');
@@ -420,8 +426,8 @@
 
                 // Collect the sections
                 $('#sectionAccordion .accordion-item').each(function () {
-                    var sectionTitle = $(this).find('.accordion-button').text();
-                    var sectionContent = $(this).find('.accordion-body').text();
+                    var sectionTitle = $(this).find('.accordion-button .mr-auto').text();
+                    var sectionContent = $(this).find('.accordion-body').html();
                     formData.sections.push({
                         title: sectionTitle,
                         content: sectionContent
@@ -462,7 +468,7 @@
 
                 // Collect the sections
                 $('#sectionAccordion .accordion-item').each(function () {
-                    var sectionTitle = $(this).find('.accordion-button').text();
+                    var sectionTitle = $(this).find('.accordion-button .mr-auto').text();
                     var sectionContent = $(this).find('.accordion-body').html();
                     formData.sections.push({
                         title: sectionTitle,

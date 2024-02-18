@@ -119,6 +119,11 @@
                                         style="margin-top: 5px; width: 150px;">
                                         Go to Course
                                     </a>
+
+                                    <a onclick="deleteCourse('<%= course._id %>')" class="btn btn-primary ms-2"
+                                        style="margin-top: 5px; width: 150px;">
+                                        Delete Course
+                                    </a>
                                 </div>
 
 
@@ -158,6 +163,24 @@
                             <% } %>
         </div>
     </div>
+    <script>
+        function deleteCourse(courseId) {
+            if (confirm("Are you sure you want to delete this course?")) {
+                fetch("/courses/delete/"+courseId, {
+                    method: "DELETE"
+                }).then(response =>{
+                    if(response.ok){
+                        alert("Course deleted successfully");
+                        window.location.reload();
+                    }
+                    else{
+                        alert("Course could not be deleted. Please try again.");
+                        window.location.reload();
+                    }
+                })
+        }
+    }
+    </script>
 </body>
 
 </html>

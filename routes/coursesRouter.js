@@ -8,6 +8,7 @@ require('dotenv').config()
 
 // Perform a search using Atlas Search
 async function searchCourses(query) {
+  console.log("Searching courses")
   try {
     // Perform the search using the Course model
     const searchResults = await Course.aggregate(
@@ -52,6 +53,7 @@ router.get('/', verifyTokenMiddleware, async (req, res) => {
 
 router.get('/:id', verifyTokenMiddleware, async (req, res) => {
   try {
+    console.log("Here I am")
     const courseId = req.params.id;
     const course = await Course.findById(courseId);
     let userId = req.user.userId
@@ -62,10 +64,12 @@ router.get('/:id', verifyTokenMiddleware, async (req, res) => {
 
     // Check if the course is present in the user's coursesOngoing array
     const hasCourseOngoing = user.coursesOngoing.some(course => course.equals(courseId));
-    if (hasCourseOngoing) {
+    const hasCourse = user.courses.some(course => course.equals(courseId));
+    const hasCoursesCompleted = user.coursesCompleted.some(course => course.equals(courseId));
+    if (hasCourseOngoing || hasCourse || hasCoursesCompleted) {
       res.render('course', { course: course, hasCourseOngoing: hasCourseOngoing, isInstructor: req.user.isInstructor });
     }
-    else { res.redirect('/index') }
+    else { res.send('<script>alert("Please buy this course to access it!");</script>'); }
   } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');
@@ -113,9 +117,43 @@ router.get('/start/:id', verifyTokenMiddleware, async (req, res) => {
 });
 
 router.get('/search/:query', verifyTokenMiddleware, async (req, res, next) => {
+  console.log("Hello hnjkjk")
   const query = req.params.query;
-  relevantCourses = await searchCourses(query)
-  res.render('courses', { courses: relevantCourses, isInstructor: req.user.isInstructor })
+  let relevantCourses = await searchCourses(query)
+  console.log(relevantCourses, req.user.isInstructor)
+  const decodedToken = jwt.verify(req.token, process.env.JWT_SECRET);
+  const userId = decodedToken.userId;
+
+  // Find the user by their ID
+  const user = await User.findById(userId);
+  res.render('courses', { courses: relevantCourses, isInstructor: user.isInstructor, key: process.env.KEY_ID, email: user.email, name: user.name, coursesOngoing: user.coursesOngoing ? user.coursesOngoing : [] }); // Render the courses.ejs template with courses data
+})
+
+router.delete('/delete/:id', verifyTokenMiddleware, async (req, res) => {
+  try {
+    // Get the course ID from the request parameters
+    const courseId = req.params.id; 
+    // Get the user ID from the decoded JWT token
+    const decodedToken = jwt.verify(req.token, process.env.JWT_SECRET);
+    const userId = decodedToken.userId;
+    // Find the user by their ID
+    const user = await User.findById(userId);
+    // Check if the course is present in courses array
+    const courseIndex = user.courses.findIndex(course => course.equals(courseId));
+    if (courseIndex!== -1) {
+      // If the course is found in courses, remove it from there
+      user.courses.splice(courseIndex, 1);
+    } 
+    // Remove the course from the courses model
+    await Course.findByIdAndDelete(courseId);
+    // Save the user
+    await user.save();
+    res.status(200).send('Course deleted successfully');
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
+  }
 })
 
 module.exports = router;

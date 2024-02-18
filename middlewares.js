@@ -7,11 +7,13 @@ require('dotenv').config()
 const nodemailer = require('nodemailer')
 const transporter = require('./transporter')
 
-const generateToken = (user, remember) => {
-    const expiresIn = remember ? undefined : '3h'; // Set to undefined for indefinite expiration or '3h' for 3 hours
-    return jwt.sign({ userId: user._id, email: user.email, isInstructor: user.isInstructor }, process.env.JWT_SECRET, { expiresIn });
-};
 
+const generateToken = (user, remember = false) => {
+
+    const options = remember ? {}: {expiresIn: '3h'}; // override expiresIn
+    
+    return jwt.sign({ userId: user._id, email: user.email, isInstructor: user.isInstructor }, process.env.JWT_SECRET, options); 
+  }
 
 // Authentication Middleware with JWT
 const authenticateMiddleware = async (req, res, next) => {
@@ -146,4 +148,4 @@ const sendMail = async (email, activationToken) => {
     }
 };
 
-module.exports = { authenticateMiddleware, verifyTokenMiddleware, registerMiddleware, checkInstructor, sendMail };
+module.exports = { authenticateMiddleware, verifyTokenMiddleware, registerMiddleware, checkInstructor, sendMail, generateToken };
