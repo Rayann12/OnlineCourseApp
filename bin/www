@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('miniproject:server');
 var http = require('http');
+var mongoose = require('mongoose');
 
 /**
  * Get port from environment and store in Express.
@@ -88,3 +89,10 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+mongoose.connect(process.env.CONNECTION_STRING);
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => {
+    console.log('Connected to MongoDB');
+})
