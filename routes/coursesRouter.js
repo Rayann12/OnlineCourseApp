@@ -11,13 +11,20 @@ async function searchCourses(query) {
   console.log("Searching courses")
   try {
     // Perform the search using the Course model
+    let start = query.charAt(0);
+    let remain = query.slice(1);
+    let ustart = start.toUpperCase();
+    let lstart = start.toLowerCase();
+    let lremain = remain.toLowerCase();
+    let uremain = remain.toUpperCase();
+    console.log(ustart, lstart, uremain, lremain);
     const searchResults = await Course.aggregate(
       [
         {
           $search: {
             "index": "default",
-            "wildcard": {
-              "query": `*${query}*`,
+            "regex": {
+              "query": `(.*)((${ustart}|${lstart})(${uremain}|${lremain}))(.*)`,
               "path": ["title", "description"]
             }
           }
