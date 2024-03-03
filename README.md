@@ -58,7 +58,7 @@ The **Online Course App** is designed to help individuals access a wide range of
    npm start
    ```
 
-   Visit http://localhost:3000 to access the Online Courses Application.
+   Visit http://localhost:3000 to access the Online Courses Application. It is temporarily available on the IP address, http://http://3.6.126.45.
 
 ## Usage
 
