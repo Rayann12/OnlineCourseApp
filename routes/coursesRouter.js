@@ -5,6 +5,8 @@ var Course = require('../models/coursesModel')
 var User = require('../models/userModel')
 var jwt = require('jsonwebtoken')
 require('dotenv').config()
+var {createStatement}=require('../xAPI/StatementCreation.js')
+var {sendStatement}=require('../xAPI/StatementSending.js')
 
 // Perform a search using Atlas Search
 async function searchCourses(query) {
@@ -94,6 +96,16 @@ router.get('/start/:id', verifyTokenMiddleware, async (req, res) => {
 
     // Find the user by their ID
     const user = await User.findById(userId);
+    const courseDetails=await Course.findById(courseId);
+
+    const verb="started";
+
+    var statement= createStatement(user,verb,courseDetails);
+
+    // console.log(statement);
+
+    var status=await sendStatement(statement);
+    console.log(status);
 
     // Check if the user is already enrolled in the course
     const alreadyEnrolled = user.coursesOngoing.some(course => course.equals(courseId));
