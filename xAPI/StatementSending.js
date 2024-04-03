@@ -9,7 +9,8 @@ async function sendStatement(statement){
       },
       body: JSON.stringify(statement)
     })
-    const data = await res.body;
+    // const data = await res.body;
+    // console.log(res.json());
     return await res.json();
 }
 

@@ -35,7 +35,10 @@ function addVerb(verb){
     var verbObj={};
     if(verb=='unenrolled'){
     verbObj['id']=`http://adlnet.gov/expapi/verbs/${verb}`;
-    }else{
+    }else if(verb=='added'){
+        verbObj['id']='https://xapi.org.au/contentprofile/verb/added'
+    }
+    else{
         verbObj['id']='http://id.tincanapi.com/verb/unregistered'
     }
     verbObj['display']={

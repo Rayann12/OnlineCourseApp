@@ -407,7 +407,7 @@
             $('#sectionAccordion').append(accordionItem);
         }
 
-        async function submitForm() {
+        async function submitForm(courseId) {
             // Get the course ID
             event.preventDefault()
             console.log("HelloSASAS ", course)
@@ -493,8 +493,15 @@
                         return response.json();
                     })
                     .then(data => {
-                        console.log('New course added successfully:', data);
-                        window.location.reload()
+                        console.log('New course added successfully:', data.course);
+                        fetch('/add', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({id:data.course._id})
+                        })
+                        // window.location.reload()
                         // Handle success response
                     })
                     .catch(error => {
