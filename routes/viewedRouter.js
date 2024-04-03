@@ -1,0 +1,31 @@
+var express = require('express');
+var router = express.Router();
+var { verifyTokenMiddleware, checkInstructor } = require('../middlewares')
+var Course = require('../models/coursesModel')
+var User = require('../models/userModel')
+var jwt = require('jsonwebtoken')
+require('dotenv').config()
+var {createStatement}=require('../xAPI/StatementCreation.js')
+var {sendStatement}=require('../xAPI/StatementSending.js')
+
+router.post('', verifyTokenMiddleware, async (req, res) => {
+    try{
+        const tocken=req.cookies.access_token;
+        const decoded=jwt.verify(tocken,process.env.JWT_SECRET);
+        const userId=decoded.userId;
+
+        let user=await User.findById(userId);
+        let courseId=req.body.courseId;
+        let course=await Course.findById(courseId);
+        let verb="viewed";
+        var statement=createStatement({actor:user,verb:verb,object:course});
+
+        var status=await sendStatement(statement);
+
+        res.json({status:status});
+    }catch(err){
+        console.log(err);
+    }
+})
+
+module.exports = router;

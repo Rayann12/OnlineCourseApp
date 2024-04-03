@@ -66,7 +66,9 @@
             class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
             <i class="fa fa-remove"></i>
         </a>
-        <a href="/index" style="text-decoration: none;"><h4 class="w3-bar-item"><b>Menu</b></h4></a>
+        <a href="/index" style="text-decoration: none;">
+            <h4 class="w3-bar-item"><b>Menu</b></h4>
+        </a>
         <a class="w3-bar-item w3-button w3-black" href="/courses">All Courses</a>
         <a class="w3-bar-item w3-button w3-hover-black" href="/enrolled">Currently Enrolled</a>
         <a class="w3-bar-item w3-button w3-hover-black" href="/completed">Completed</a>
@@ -120,10 +122,9 @@
 
                                 <!-- Button to mark as completed -->
                                 <div style="display: flex;">
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal_<%= course._id %>"
-                                        style="margin-top: 5px; width: 1500px; height: 50px; padding-bottom: 5px;;">
-                                        Click here to know more
+                                    <button class="btn btn-primary"
+                                        style="margin-top: 5px; width: 1500px; height: 50px; padding-bottom: 5px;"
+                                        onclick="viewedStatement('<%= course._id %>')">Click here to know more
                                     </button>
                                     <div style="display: flex;">
                                         <% if (coursesOngoing.includes(course._id)) { %>
@@ -134,7 +135,8 @@
                                             <% } else { %>
                                                 <button
                                                     onclick="buyCourse('<%= course._id %>', '<%= course.title %>', '<%= course.cost %>', '<%= key %>', '<%= name %>', '<%= email %>')"
-                                                    class="btn btn-primary ms-2" style="margin-top: 5px; width: 150px; height: 50px;">
+                                                    class="btn btn-primary ms-2"
+                                                    style="margin-top: 5px; width: 150px; height: 50px;">
                                                     Buy Course
                                                 </button>
                                                 <% } %>
@@ -239,16 +241,16 @@
                             // alert("This step of Payment Succeeded");
 
 
-                            await fetch('/enrolled/enroll',{
+                            await fetch('/enrolled/enroll', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
-                                body:JSON.stringify({ courseId: courseId })
+                                body: JSON.stringify({ courseId: courseId })
                             })
 
 
-                            window.location.href=`/courses/start/${courseId}`
+                            window.location.href = `/courses/start/${courseId}`
                         },
                         "prefill": {
                             //Here we are prefilling random contact 
@@ -267,6 +269,21 @@
                     var razorpayObject = new Razorpay(options);
                     razorpayObject.open();
                 })
+        }
+
+        function viewedStatement(id) {
+            console.log("jgft");
+            var modal = new bootstrap.Modal(document.getElementById('exampleModal_' + id));
+            modal.show();
+            fetch('/viewed', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({courseId:id})
+            }).then((res)=>{
+                console.log(res);
+            })
         }
     </script>
 </body>
