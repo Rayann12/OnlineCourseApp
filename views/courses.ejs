@@ -236,7 +236,18 @@
                                 body: { order_id: orderId, payment_id: paymentId }
                             })
                             alert("Payment Successful")
-                            alert("This step of Payment Succeeded");
+                            // alert("This step of Payment Succeeded");
+
+
+                            await fetch('/enrolled/enroll',{
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body:JSON.stringify({ courseId: courseId })
+                            })
+
+
                             window.location.href=`/courses/start/${courseId}`
                         },
                         "prefill": {

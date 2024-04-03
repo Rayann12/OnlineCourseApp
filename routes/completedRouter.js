@@ -2,8 +2,11 @@ var express = require('express');
 var router = express.Router();
 var { verifyTokenMiddleware } = require('../middlewares')
 var User = require('../models/userModel')
+var Course = require('../models/coursesModel')
 var jwt = require('jsonwebtoken')
 require('dotenv').config()
+var {createStatement}=require('../xAPI/StatementCreation.js')
+var {sendStatement}=require('../xAPI/StatementSending.js')
 
 router.get('/', verifyTokenMiddleware, async (req, res) => {
     try {
@@ -37,6 +40,40 @@ router.get('/:id', verifyTokenMiddleware, async (req, res) => {
             $pull: { coursesOngoing: courseId },
             $addToSet: { coursesCompleted: courseId }
         });
+
+        const user = await User.findById(userId);
+        const courseDetails=await Course.findById(courseId);
+
+        const verb="completed";
+        const contextData={
+            'contextActivities': {
+            'category':[
+              {
+                'id':'http://adlnet.gov/expapi/activities/course',
+                'objectType':'Activity',
+                'definition':{
+                  'name':{
+                    'en-US': 'Course',
+                  },
+                  'description':{
+                    'en-US': 'A Category of course is used for '+courseDetails.title
+                  }
+                }
+              },
+              {
+                'id':'http://adlnet.gov/expapi/activities/abcd',
+                'objectType':'Activity'
+              }
+            ]
+          }
+          }
+
+        var statement= createStatement({actor:user,verb:verb,object:courseDetails,context:contextData});
+
+        console.log(statement);
+
+        var status=await sendStatement(statement);
+        console.log(status);
 
         // Redirect to the completed page
         res.redirect('/completed');

@@ -100,9 +100,33 @@ router.get('/start/:id', verifyTokenMiddleware, async (req, res) => {
 
     const verb="started";
 
-    var statement= createStatement(user,verb,courseDetails);
+    const contextData={
+      'contextActivities': {
+      'category':[
+        {
+          'id':'http://adlnet.gov/expapi/activities/course',
+          'objectType':'Activity',
+          'definition':{
+            'name':{
+              'en-US': 'Course',
+            },
+            'description':{
+              'en-US': 'A Category of course is used for '+courseDetails.title
+            }
+          }
+        },
+        {
+          'id':'http://adlnet.gov/expapi/activities/abcd',
+          'objectType':'Activity'
+        }
+      ]
+    }
+    }
 
-    // console.log(statement);
+    var statement= createStatement({actor:user,verb:verb,object:courseDetails,context:contextData});
+
+    console.log(statement);
+    // process.exit;
 
     var status=await sendStatement(statement);
     console.log(status);
