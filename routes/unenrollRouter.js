@@ -8,7 +8,7 @@ require('dotenv').config()
 var {createStatement}=require('../xAPI/StatementCreation.js')
 var {sendStatement}=require('../xAPI/StatementSending.js')
 
-router.post('', verifyTokenMiddleware, async (req, res) => {
+router.post('/', verifyTokenMiddleware, async (req,res)=>{
     try{
         const tocken=req.cookies.access_token;
         const decoded=jwt.verify(tocken,process.env.JWT_SECRET);
@@ -29,10 +29,14 @@ router.post('', verifyTokenMiddleware, async (req, res) => {
                     'en-US': 'Course',
                   },
                   'description':{
-                    'en-US': 'A Category of course is used for '+courseDetails.title
+                    'en-US': 'A Category of course is used for '+course.title
                   }
                 }
               },
+              {
+                'id':'http://adlnet.gov/expapi/activities/abcd',
+                'objectType':'Activity'
+              }
             ]
           }
           }
@@ -46,4 +50,4 @@ router.post('', verifyTokenMiddleware, async (req, res) => {
     }
 })
 
-module.exports = router;
+module.exports=router;

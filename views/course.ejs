@@ -103,8 +103,8 @@
                                 <% } else { %>
                                     <a href="/completed/<%= course._id %>" class="btn btn-primary">Mark as completed</a>
                                     <% } %>
-                                    <a href="/courses" class="btn btn-secondary">Unenroll from this Course</a>
-                                        <a href="/courses" class="btn btn-secondary">Back to All Courses</a>
+                                    <button class="btn btn-secondary" onclick="unenrolledStatement('<%= course._id %>')">Unenroll from this Course</button>
+                                    <a href="/courses" class="btn btn-secondary">Back to All Courses</a>
                         </div>
 
             </div>
@@ -112,5 +112,19 @@
     </div>
 
 </body>
+
+<script>
+    function unenrolledStatement(courseId) {
+        fetch('/unenrolled',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify({courseId:courseId})
+        })
+
+        window.location.href='/courses'
+    }
+</script>
 
 </html>

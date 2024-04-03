@@ -150,6 +150,7 @@ enrolledRouter = require('./enrolledRouter')
 loginRouter = require('./loginRouter')
 registerRouter = require('./registerRouter')
 viewedRouter=require('./viewedRouter')
+unenrolledRouter=require('./unenrollRouter');
 
 router.use('/courses', coursesRouter)
 router.use('/coursesForm', coursesFormRouter);
@@ -158,5 +159,6 @@ router.use('/enrolled', enrolledRouter);
 router.use('/login', loginRouter);
 router.use('/register', registerRouter);
 router.use('/viewed', viewedRouter);
+router.use('/unenrolled', unenrolledRouter);
 
 module.exports = router;
