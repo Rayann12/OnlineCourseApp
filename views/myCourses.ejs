@@ -164,8 +164,16 @@
         </div>
     </div>
     <script>
-        function deleteCourse(courseId) {
+        async function deleteCourse(courseId) {
             if (confirm("Are you sure you want to delete this course?")) {
+                let res=fetch('/delete', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({id:courseId})
+                    })
+                console.log(await res);
                 fetch("/courses/delete/"+courseId, {
                     method: "DELETE"
                 }).then(response =>{

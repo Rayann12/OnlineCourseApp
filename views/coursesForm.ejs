@@ -446,11 +446,14 @@
                         if (!response.ok) {
                             throw new Error('Failed to update course details');
                         }
+                        fetch('/update', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({id:courseId})
+                        })
                         return response.json();
-                    })
-                    .then(data => {
-                        window.location.reload();
-                        // Handle success response
                     })
                     .catch(error => {
                         console.error('Error updating course details:', error);
@@ -501,7 +504,7 @@
                             },
                             body: JSON.stringify({id:data.course._id})
                         })
-                        // window.location.reload()
+                        window.location.reload()
                         // Handle success response
                     })
                     .catch(error => {

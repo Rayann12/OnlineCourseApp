@@ -37,6 +37,10 @@ function addVerb(verb){
     verbObj['id']=`http://adlnet.gov/expapi/verbs/${verb}`;
     }else if(verb=='added'){
         verbObj['id']='https://xapi.org.au/contentprofile/verb/added'
+    }else if(verb=='updated'){
+        verbObj['id']='https://w3id.org/xapi/medbiq/verbs/updated'
+    }else if (verb=='deleted'){
+        verbObj['id']='https://w3id.org/xapi/dod-isd/verbs/deleted'
     }
     else{
         verbObj['id']='http://id.tincanapi.com/verb/unregistered'
