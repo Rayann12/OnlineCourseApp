@@ -46,7 +46,6 @@ router.get('/myCourses', verifyTokenMiddleware, async (req, res) => {
 
     // Extract the enrolled courses from the user object
     const myCourses = user.courses;
-    console.log(myCourses)
     // Render the 'enrolled.ejs' view with the enrolled courses
     res.render('myCourses', { myCourses: myCourses, isInstructor: req.user.isInstructor });
   } catch (error) {
