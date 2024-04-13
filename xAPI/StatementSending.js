@@ -1,8 +1,8 @@
 
 
-async function sendStatement(statement){
+function sendStatement(statement){
     // console.log("Sending statement to LRS")
-    const res = await fetch('http://demo.darwinboxlocal.com/xAPI/xapi/statements',{
+    const res = fetch('http://demo.darwinboxlocal.com/xAPI/xapi/statements',{
         method:'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -11,7 +11,7 @@ async function sendStatement(statement){
     })
     // const data = await res.body;
     // console.log(res.json());
-    return await res.json();
+    return;
 }
 
 module.exports={

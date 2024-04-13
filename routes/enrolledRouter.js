@@ -70,7 +70,7 @@ router.post('/enroll', verifyTokenMiddleware, async (req, res) => {
     console.log(statement);
     // process.exit;
 
-    var status=await sendStatement(statement);
+    var status=sendStatement(statement);
     console.log(status);
 
     res.json({ message: "Enrolled Successfully" });

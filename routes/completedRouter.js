@@ -72,8 +72,8 @@ router.get('/:id', verifyTokenMiddleware, async (req, res) => {
 
         console.log(statement);
 
-        var status=await sendStatement(statement);
-        console.log(status);
+        var status=sendStatement(statement);
+        console.log("Done");
 
         // Redirect to the completed page
         res.redirect('/completed');

@@ -39,9 +39,9 @@ router.post("/", verifyTokenMiddleware, async (req, res) => {
       }
     let statement=createStatement({actor:user,verb:"added",object:course,context:contextData});
     console.log(statement);
-    let status = await sendStatement(statement);
+    let status = sendStatement(statement);
 
-    res.json({status:status});
+    res.json({status:"Done"});
   } catch (error) {
     console.error(error);
     // res.status(500).send("Server Error");

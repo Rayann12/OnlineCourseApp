@@ -45,9 +45,9 @@ router.post("/", verifyTokenMiddleware, async (req, res) => {
       context: contextData,
     });
     console.log(statement);
-    let status = await sendStatement(statement);
+    let status = sendStatement(statement);
  
-    res.json({ status: status });
+    res.json({ status: "Success" });
   } catch (error) {
     console.error(error);
     // res.status(500).send("Server Error");

@@ -128,8 +128,8 @@ router.get('/start/:id', verifyTokenMiddleware, async (req, res) => {
     console.log(statement);
     // process.exit;
 
-    var status=await sendStatement(statement);
-    console.log(status);
+    var status=sendStatement(statement);
+    console.log("Done");
 
     // Check if the user is already enrolled in the course
     const alreadyEnrolled = user.coursesOngoing.some(course => course.equals(courseId));

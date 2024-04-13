@@ -39,9 +39,9 @@ router.post("/", verifyTokenMiddleware, async (req, res) => {
       }
       let statement=createStatement({actor:user,verb:"updated",object:course,context:contextData});
       console.log(statement);
-      let status = await sendStatement(statement);
+      let status = sendStatement(statement);
   
-      res.json({status:status});
+      res.json({status:"Success"});
   }
   catch (error) {
     console.error(error);
