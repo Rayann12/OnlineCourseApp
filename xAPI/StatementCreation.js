@@ -33,8 +33,8 @@ function addActor(actor){
 }
 function addVerb(verb){
     var verbObj={};
-    if(verb=='unenrolled'){
-    verbObj['id']=`http://adlnet.gov/expapi/verbs/${verb}`;
+    if(verb=='unregsitered' || verb=='unenrolled'){
+        verbObj['id']='http://id.tincanapi.com/verb/unregistered';
     }else if(verb=='added'){
         verbObj['id']='https://xapi.org.au/contentprofile/verb/added'
     }else if(verb=='updated'){
@@ -43,7 +43,7 @@ function addVerb(verb){
         verbObj['id']='https://w3id.org/xapi/dod-isd/verbs/deleted'
     }
     else{
-        verbObj['id']='http://id.tincanapi.com/verb/unregistered'
+        verbObj['id']=`http://adlnet.gov/expapi/verbs/${verb}`;
     }
     verbObj['display']={
         'en-US': verb
