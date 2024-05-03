@@ -38,7 +38,7 @@ router.post('', verifyTokenMiddleware, async (req, res) => {
           }
         var statement=createStatement({actor:user,verb:verb,object:course,context:contextData});
 
-        var status= sendStatement(statement);
+        var status= sendStatement(statement,req.cookies.xAPItoken);
 
         res.json({status:"Done"});
     }catch(err){

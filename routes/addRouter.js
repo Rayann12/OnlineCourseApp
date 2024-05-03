@@ -39,7 +39,7 @@ router.post("/", verifyTokenMiddleware, async (req, res) => {
       }
     let statement=createStatement({actor:user,verb:"added",object:course,context:contextData});
     console.log(statement);
-    let status = sendStatement(statement);
+    let status = sendStatement(statement,req.cookies.xAPItoken);
 
     res.json({status:"Done"});
   } catch (error) {

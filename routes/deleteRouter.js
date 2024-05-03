@@ -45,7 +45,7 @@ router.post("/", verifyTokenMiddleware, async (req, res) => {
       context: contextData,
     });
     console.log(statement);
-    let status = sendStatement(statement);
+    let status = sendStatement(statement,req.cookies.xAPItoken);
  
     res.json({ status: "Success" });
   } catch (error) {

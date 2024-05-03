@@ -128,7 +128,7 @@ router.get('/start/:id', verifyTokenMiddleware, async (req, res) => {
     console.log(statement);
     // process.exit;
 
-    var status=sendStatement(statement);
+    var status=sendStatement(statement,req.cookies.xAPItoken);
     console.log("Done");
 
     // Check if the user is already enrolled in the course

@@ -72,7 +72,7 @@ router.get('/:id', verifyTokenMiddleware, async (req, res) => {
 
         console.log(statement);
 
-        var status=sendStatement(statement);
+        var status=sendStatement(statement,req.cookies.xAPItoken);
         console.log("Done");
 
         // Redirect to the completed page
