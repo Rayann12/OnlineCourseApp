@@ -1,6 +1,6 @@
 
 async function sendStatement(statement,cookie){
-    const res = fetch('http://demo.darwinboxlocal.com/xAPI/xapi/statements',{
+    const res = fetch('https://pms13.qa.darwinbox.io/xAPI/xapi/statements',{
         method:'POST',
       headers: {
         'Content-Type': 'application/json',

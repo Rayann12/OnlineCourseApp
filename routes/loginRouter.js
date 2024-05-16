@@ -12,14 +12,14 @@ router.post('/', authenticateMiddleware, async function (req, res, next) {
     const token = req.token
     console.log(`This is theeeee ${token}`)
     res.cookie("access_token", token, { secure: false, httpOnly: false })
-    const response = await fetch('http://demo.darwinboxlocal.com/xAPI/oauth/authenticate', {
+    const response = await fetch('https://pms13.qa.darwinbox.io/xAPI/oauth/Authenticate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                'clientId': process.env.CLIENT_ID,
-                'clientSecret': process.env.CLIENT_SECRET
+                'client_id': process.env.CLIENT_ID,
+                'client_secret': process.env.CLIENT_SECRET
             })
         });
         const data = await response.json();
