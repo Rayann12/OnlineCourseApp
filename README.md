@@ -1,4 +1,4 @@
-# Expense Tracker Project
+# Online Course Application
 
 ## Overview
 
